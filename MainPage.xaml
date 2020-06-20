@@ -5,9 +5,71 @@
     xmlns:local="using:FileEx"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Windows.UI.Xaml.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-    </Grid>
+    <Page.Resources>
+
+
+    </Page.Resources>
+
+    <!--<Grid>
+        <GridView 
+            ItemsSource="{x:Bind FileItems}"
+            IsItemClickEnabled="True"
+            ItemClick="FilesGridView_ItemClick"
+            ItemTemplate="{StaticResource FileItemTemplate}"
+            x:Name="filesGridView"
+            />
+    </Grid>-->
+    <!--<muxc:NavigationView x:Name="NavView"
+                         Loaded="NavView_Loaded"
+                         ItemInvoked="NavView_ItemInvoked"
+                         BackRequested="NavView_BackRequested">-->
+
+    <muxc:NavigationView x:Name="NavView">
+    <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem Tag="home" Icon="Home" Content="Home"/>
+                <muxc:NavigationViewItemSeparator/>
+                <muxc:NavigationViewItemHeader x:Name="MainPagesHeader"
+                                           Content="Main pages"/>
+            <muxc:NavigationViewItem Tag="music" Icon="Audio" Content="Music"/>
+            <muxc:NavigationViewItem Tag="documents" Icon="Audio" Content="Documents"/>
+            <muxc:NavigationViewItem Tag="videos" Icon="Audio" Content="Videos"/>
+            <muxc:NavigationViewItem Tag="vault" Icon="Audio" Content="Vault"/>
+        </muxc:NavigationView.MenuItems>
+
+        <muxc:NavigationView.AutoSuggestBox>
+            <!-- See AutoSuggestBox documentation for
+                more info about how to implement search. -->
+        <!--<AutoSuggestBox x:Name="NavViewSearchBox" PlaceholderText="Find files..." TextChanged="searchBox_TextChanged" QueryIcon="Find"/>-->
+        <AutoSuggestBox x:Name="NavViewSearchBox" PlaceholderText="Find files..." QueryIcon="Find"/>
+        </muxc:NavigationView.AutoSuggestBox>
+
+        <Grid>
+            <!--<Frame Grid.Row="1" x:Name="ContentFrame" Padding="12,0,12,24" IsTabStop="True"
+                   NavigationFailed="ContentFrame_NavigationFailed"/>-->
+            <Frame Grid.Row="1" x:Name="ContentFrame" Padding="12,0,12,24" IsTabStop="True"/>
+        </Grid>
+    </muxc:NavigationView>
+
+    <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger
+                        MinWindowWidth="{x:Bind NavView.CompactModeThresholdWidth}"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!-- Remove the next 3 lines for left-only navigation. -->
+                        <Setter Target="NavView.PaneDisplayMode" Value="Top"/>
+                        <Setter Target="NavViewSearchBox.Width" Value="200"/>
+                        <Setter Target="MainPagesHeader.Visibility" Value="Collapsed"/>
+                         <!--Leave the next line for left-only navigation.--> 
+                        <Setter Target="ContentFrame.Padding" Value="24,0,24,24"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 </Page>

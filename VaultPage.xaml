@@ -1,0 +1,73 @@
+﻿<Page
+    x:Class="FileEx.VaultPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FileEx"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" FontSize="33.333">
+        <Page.Resources>
+            <Storyboard x:Name="AuthenticationFailed" AutoReverse="True" RepeatBehavior="1x">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="image">
+                    <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="15">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuarticEase EasingMode="EaseIn"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-15">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuadraticEase EasingMode="EaseInOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+        </Page.Resources>
+
+
+        <Grid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="1.5*"/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Image x:Name="image" Margin="45" Source="Assets/SmallLogo.png" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <CompositeTransform/>
+                        </Image.RenderTransform>
+                    </Image>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.Background>
+                    <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}"/>
+                    </Grid.Background>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1.5*"/>
+                        <RowDefinition Height="5*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="passwordBox" InputScope="Number" VerticalAlignment="Stretch" BorderBrush="{x:Null}" Foreground="White" PlaceholderText="" FontSize="26.667" MaxLength="4" TextAlignment="Center" Background="{x:Null}" TextChanged="passwordBox_TextChanged" LostFocus="passwordBox_LostFocus"/>
+                    <!--<TextBlock x:Name="passwordBox" Text="" CharacterSpacing="1000" FontWeight="Bold" VerticalAlignment="Stretch" MaxLines="1"/>-->
+                    <!--<Grid x:Name="passwordGrid" Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>-->
+                    <Grid Grid.Row="1" Tapped="Grid_Tapped">
+                        <Grid.Background>
+                        <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}"/>
+                        </Grid.Background>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Page>

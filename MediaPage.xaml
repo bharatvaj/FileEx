@@ -1,0 +1,161 @@
+﻿<Page
+    x:Class="FileEx.MediaPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FileEx"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <Storyboard x:Name="DurationBlink" RepeatBehavior="Forever" AutoReverse="True">
+            <DoubleAnimation Duration="0:0:0.6" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="currentDuration">
+                <DoubleAnimation.EasingFunction>
+                    <SineEase EasingMode="EaseInOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Name="SeekOpen">
+            <DoubleAnimation Duration="0:0:0.2" To="1" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="border" d:IsOptimized="True">
+                <DoubleAnimation.EasingFunction>
+                    <BackEase EasingMode="EaseInOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Name="SeekClose">
+            <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border" d:IsOptimized="True"/>
+            <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="border" d:IsOptimized="True"/>
+        </Storyboard>
+    </Page.Resources>
+
+    <Grid x:Name="MediaFragment">
+        <Grid.Background>
+            <SolidColorBrush Color="{ThemeResource SystemColorWindowColor}"/>
+        </Grid.Background>
+        <Grid x:Name="imageContainerMedia" VerticalAlignment="Stretch">
+            <Grid.Background>
+                <SolidColorBrush Color="{ThemeResource SystemColorWindowColor}"/>
+            </Grid.Background>
+            <Viewbox StretchDirection="Both" Stretch="Uniform">
+                <MediaElement x:Name="mediaPlayer" AudioCategory="BackgroundCapableMedia" VerticalAlignment="Center"/>
+            </Viewbox>
+            <Grid VerticalAlignment="Stretch" Margin="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid x:Name="grid1">
+                    <Grid.Background>
+                        <SolidColorBrush Color="{ThemeResource SystemColorWindowTextColor}"/>
+                    </Grid.Background>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid MinWidth="50" MinHeight="0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button >
+                            <StackPanel Margin="10,0" Orientation="Horizontal">
+                                <StackPanel VerticalAlignment="Center" CacheMode="BitmapCache" x:Name="grid" Grid.Column="1" Margin="0">
+                                    <TextBlock x:Name="SongName" Text="no media" TextWrapping="NoWrap" MinWidth="175" FontSize="18.667" VerticalAlignment="Center" FontFamily="Assets/Font/Custom/Raleway-Light.ttf#Raleway" Margin="0" HorizontalAlignment="Left" Foreground="White"/>
+                                    <TextBlock x:Name="SongArtist" Text="" FontSize="10.667" VerticalAlignment="Center" Margin="0" FontFamily="Assets/Font/Custom/ClearSans-Thin.ttf#Clear Sans Thin" HorizontalAlignment="Left" Foreground="White"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                    <Button x:Name="button2" Grid.Column="1" MinWidth="0" Visibility="Collapsed"  Content="c"  FontFamily="Assets/Font/iconfont.ttf#iconfont"/>
+                </Grid>
+                <Grid x:Name="grid2" Grid.Row="1" Visibility="Visible" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <TextBlock x:Name="musicArt" Text="y" FontSize="150" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Assets/Font/iconfont.ttf#iconfont" />
+                        <Rectangle>
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" Opacity="0.7">
+                                    <GradientStop Color="Black" Offset="0"/>
+                                    <GradientStop Color="Black" Offset="1"/>
+                                    <GradientStop Offset="0.5"/>
+                                    <GradientStop Offset="0.05" Color="{ThemeResource SystemColorWindowTextColor}"/>
+                                    <GradientStop Offset="0.95" Color="{ThemeResource SystemColorWindowTextColor}"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <ToggleButton x:Name="favoriteToggle" HorizontalAlignment="Right" FontFamily="Assets/Font/iconfont.ttf#iconfont" Padding="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" MinHeight="55" MinWidth="55" VerticalAlignment="Top" UseLayoutRounding="False" Content="a" d:LayoutOverrides="VerticalAlignment"/>
+                        <!--<ListView x:Name="MusicView"
+                                        ItemTemplate="{StaticResource RecentPlayTemplate}">
+                                    <ListView.Background>
+
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" Opacity="0.75">
+                                            <GradientStop Color="Black" Offset="0"/>
+                                            <GradientStop Color="Black" Offset="1"/>
+                                            <GradientStop Offset="0.05" Color="{ThemeResource SystemColorWindowTextColor}"/>
+                                            <GradientStop Offset="0.95" Color="{ThemeResource SystemColorWindowTextColor}"/>
+                                        </LinearGradientBrush>
+                                    </ListView.Background>
+
+                                </ListView>-->
+                    </Grid>
+                    <Grid VerticalAlignment="Bottom">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ToggleButton MinWidth="50" Content="X" FontFamily="Assets/Font/iconfont.ttf#iconfont" Style="{StaticResource ToggleButtonStyle}" VerticalAlignment="Bottom" Margin="10,0,0,25" Checked="RepeatButtonChecked" Unchecked="RepeatButtonUnchecked"/>
+                        <Border Grid.Column="1" x:Name="border" VerticalAlignment="Center" RenderTransformOrigin="0.5,1">
+                            <Border.RenderTransform>
+                                <CompositeTransform ScaleY="0"/>
+                            </Border.RenderTransform>
+                            <Border.Background>
+                                <SolidColorBrush Color="{ThemeResource SystemColorWindowTextColor}" Opacity="0.98"/>
+                            </Border.Background>
+                            <TextBlock  x:Name="sliderTimer" Margin="30" Text="{Binding Text, ElementName=currentDuration}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30"/>
+                        </Border>
+                        <ToggleButton Content="Y" MinWidth="50" Grid.Column="2" FontFamily="Assets/Font/iconfont.ttf#iconfont" Style="{StaticResource ToggleButtonStyle}" Margin="0,0,10,25" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                    </Grid>
+
+                    <Grid Grid.Row="1" VerticalAlignment="Center">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.Background>
+                                    <SolidColorBrush Color="{ThemeResource SystemColorWindowTextColor}"/>
+                                </Grid.Background>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Slider Value="0" Margin="10" x:Name="musicSlider" BorderBrush="{x:Null}" VerticalAlignment="Top"/>
+
+                                <TextBlock x:Name="currentDuration"  Grid.Row="1" Text="--:--" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,5,0,5"/>
+                                <TextBlock x:Name="mediaDuration" Text="--:--" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.Background>
+                                    <SolidColorBrush Color="{ThemeResource SystemColorWindowTextColor}"/>
+                                </Grid.Background>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button  Content="6"  FontFamily="Assets/Font/iconfont.ttf#iconfont" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                    <Button x:Name="playPause" Grid.Column="1" Content="5" FontFamily="Assets/Font/iconfont.ttf#iconfont"  Click="PlayCurrent" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                    <Button Content="4" Grid.Column="2"  FontFamily="Assets/Font/iconfont.ttf#iconfont" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="PlayNext"/>
+                                </Grid>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
