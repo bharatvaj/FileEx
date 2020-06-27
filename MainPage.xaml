@@ -28,7 +28,10 @@
                          ItemInvoked="NavView_ItemInvoked"
                          BackRequested="NavView_BackRequested">-->
 
-    <muxc:NavigationView x:Name="NavView">
+    <muxc:NavigationView x:Name="NavView"
+                         Loaded="NavView_Loaded"
+                         ItemInvoked="NavView_ItemInvoked"
+                         BackRequested="NavView_BackRequested">
     <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem Tag="home" Icon="Home" Content="Home"/>
                 <muxc:NavigationViewItemSeparator/>

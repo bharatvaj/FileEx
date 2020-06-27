@@ -41,7 +41,7 @@ namespace FileEx
             txtH.Text = ".";
             txtH.VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Center;
             txtH.FontSize = 10;
-            txtH.Foreground = (SolidColorBrush)Application.Current.Resources["SystemAccentColor"];
+            //txtH.Foreground = (SolidColorBrush)Application.Current.Resources["SystemAccentColor"];
             //content.FontFamily = new FontFamily("Assets/Font/Custom/Raleway-Light.ttf#Raleway");
             content.TextLineBounds = TextLineBounds.Tight;
             content.TextAlignment = TextAlignment.Center;

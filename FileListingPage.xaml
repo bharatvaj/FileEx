@@ -17,8 +17,8 @@
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Name="GridFoldersView">
-            <ItemsControl Height="{Binding GridHeight}" Width="{Binding GridWidth}" Background="{x:Null}" Holding="ItemHolding">
-                <StackPanel CacheMode="BitmapCache" Background="{Binding Background}">
+            <ItemsControl  Background="{x:Null}" Holding="ItemHolding">
+                <StackPanel CacheMode="BitmapCache">
                     <Grid Margin="0,5,0,0">
                         <TextBlock x:Name="textBlock" HorizontalAlignment="Center" Width="130" Text="{Binding Image}" FontSize="65" FontFamily="Assets/Font/filetypes.ttf#filetypes" TextAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                             <TextBlock.RenderTransform>
@@ -28,11 +28,12 @@
                         <TextBlock Text="{Binding Count}" x:Name="DataContents" Foreground="{ThemeResource AppBarItemForegroundThemeBrush}" TextAlignment="Center" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,2,0,0"/>
                     </Grid>
                     <TextBlock  Text="{Binding Name}" FontSize="16" TextTrimming="WordEllipsis" x:Name="DataName" Foreground="{ThemeResource AppBarItemForegroundThemeBrush}" TextAlignment="Center" FontFamily="Assets/Font/Custom/Raleway-Light.ttf#Raleway" Margin="4,0"/>
-                    <TextBlock Text="53.05 mb" Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisConverter}}" HorizontalAlignment="Center">
+                    <!--Enable later-->
+                    <!--<TextBlock Text="53.05 mb" Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisConverter}}" HorizontalAlignment="Center">
                         <TextBlock.Foreground>
                             <SolidColorBrush Color="{ThemeResource BaseLowColor}"/>
                         </TextBlock.Foreground>
-                    </TextBlock>
+                    </TextBlock>-->
                 </StackPanel>
             </ItemsControl>
         </DataTemplate>
@@ -51,11 +52,11 @@
                                 <SolidColorBrush Color="{ThemeResource PhoneBaseMediumHighColor}"/>
                             </TextBlock.Foreground>
                         </TextBlock>
-                        <TextBlock Text="53.05 mb" Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisConverter}}" VerticalAlignment="Top" Margin="3,1,0,0">
+                        <!--<TextBlock Text="53.05 mb" Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisConverter}}" VerticalAlignment="Top" Margin="3,1,0,0">
                             <TextBlock.Foreground>
                                 <SolidColorBrush Color="{ThemeResource PhoneBaseLowColor}"/>
                             </TextBlock.Foreground>
-                        </TextBlock>
+                        </TextBlock>-->
                     </StackPanel>
                 </StackPanel>
             </ItemsControl>
@@ -260,19 +261,20 @@
 
         <Grid Grid.Row="2">
             <GridView x:Name="SDGridView"
-                                              Visibility="Visible" 
-                                              ItemTemplate="{StaticResource GridFoldersView}"
-                                              ItemsPanel="{StaticResource GridViewItemsPanel}"
-                                              SelectionMode="Single"
-                                              ScrollViewer.VerticalScrollMode="Enabled"
-                                              ScrollViewer.IsDeferredScrollingEnabled="False"
-                                              ScrollViewer.IsScrollInertiaEnabled="False"
-                                              ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                              ScrollViewer.HorizontalScrollMode="Disabled" 
-                                              IsItemClickEnabled="True"
-                                              ItemClick="GridItemClick"
-                                              IncrementalLoadingThreshold="5" SelectionChanged="FileModelChanged">
+                Visibility="Visible" 
+                ItemTemplate="{StaticResource GridFoldersView}"
+                ItemsPanel="{StaticResource GridViewItemsPanel}"
+                ItemsSource="{x:Bind sd, Mode=OneWay}"
+                SelectionMode="Single"
+                ScrollViewer.VerticalScrollMode="Enabled"
+                ScrollViewer.IsDeferredScrollingEnabled="False"
+                ScrollViewer.IsScrollInertiaEnabled="False"
+                ScrollViewer.VerticalScrollBarVisibility="Visible"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.HorizontalScrollMode="Disabled" 
+                IsItemClickEnabled="True"
+                ItemClick="GridItemClick"
+                IncrementalLoadingThreshold="5" SelectionChanged="FileModelChanged">
                 <GridView.Background>
                     <SolidColorBrush Color="#CC000000"/>
                 </GridView.Background>
@@ -305,7 +307,7 @@
             </Button>
         </Grid>
 
-            <ScrollViewer Grid.Row="1" x:Name="EmptyFolderStack" Visibility="Collapsed">
+        <ScrollViewer Grid.Row="1" x:Name="EmptyFolderStack" Visibility="Collapsed">
             <ScrollViewer.Background>
                 <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}"/>
             </ScrollViewer.Background>

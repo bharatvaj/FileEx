@@ -137,7 +137,7 @@ namespace FileEx
 
         #region BackButtonHandler
 
-      
+
         private async void MainPageOld_BackRequestedAsync(object sender, BackRequestedEventArgs e)
         {
             e.Handled = true;
@@ -177,7 +177,7 @@ namespace FileEx
             //}
             //else
             //{
-                //OpenDialog();
+            //OpenDialog();
             //}
         }
 
@@ -247,5 +247,44 @@ namespace FileEx
         }
         #endregion
 
+        private void NavView_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+            try
+            {
+                switch (args.InvokedItem)
+                {
+                    case "Home":
+
+                        var picker = new Windows.Storage.Pickers.FolderPicker();
+                        picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+                        picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+                        picker.FileTypeFilter.Add("*");
+
+                        IStorageFolder folder = await picker.PickSingleFolderAsync();
+                        if (folder != null)
+                        {
+                            ContentFrame.Navigate(typeof(FileListingPage), folder);
+                        }
+                        else
+                        {
+                            /// TODO handle error
+                        }
+                        break;
+                }
+            } catch(Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+        }
+
+        private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+
+        }
     }
 }

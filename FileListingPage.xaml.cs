@@ -64,13 +64,7 @@ namespace FileEx
         public FileListingPage()
         {
             this.InitializeComponent();
-            Loaded += FileListingPage_Loaded;
             storageFolder = ApplicationData.Current.LocalFolder;
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Disabled;
-
-            SDGridView.ItemsSource = sd;
-
-            this.Addresser.InitializeComponent();
             #region SettingsSerializer
             if (settings.Values.Count == 0)
             {
@@ -96,6 +90,16 @@ namespace FileEx
             }
             ChangeTemplate();
             #endregion
+            Loaded += FileListingPage_Loaded;
+
+        }
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (e.Parameter != null)
+            {
+                CurrentFolder = e.Parameter as IStorageFolder;
+            }
         }
         #region DialogOpenClose
         public void OpenDialog(int dialogNo)
@@ -162,7 +166,7 @@ namespace FileEx
 
         private void CloseDialog(object sender, RoutedEventArgs e)
         {
-            //CloseDialog(2);
+            CloseDialog(2);
         }
         private void AI(String name, String exception)
         {
@@ -171,7 +175,21 @@ namespace FileEx
 
         private void FileListingPage_Loaded(object sender, RoutedEventArgs e)
         {
-            GetSDRoot();
+
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Disabled;
+
+            SDGridView.ItemsSource = sd;
+
+            this.Addresser.InitializeComponent();
+            try
+            {
+                GetFilesAndFolder(CurrentFolder);
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            //GetSDRoot();
         }
 
         /// <summary>
@@ -697,13 +715,11 @@ namespace FileEx
 
         private async void DeleteThisFolder(object sender, RoutedEventArgs e)
         {
-            //int index = CurrentFolder.Path.LastIndexOf(CurrentFolder.Name);
-            var sf = await StorageFolder.GetFolderFromPathAsync(CurrentFolder.Path);
-            var td = CurrentFolder.DeleteAsync();
-            td.Completed += (es, t) =>
-            {
-                GetFilesAndFolder(sf);
-            };
+            var parent = await (CurrentFolder as StorageFolder).GetParentAsync();
+            /// TODO
+            //await CurrentFolder.DeleteAsync();
+            CurrentFolder = parent;
+            GetFilesAndFolder(parent);
         }
 
 
@@ -845,7 +861,6 @@ namespace FileEx
         #region FileLister
         public void FileCategorize(IReadOnlyList<IStorageItem> Items, IStorageFolder anyFolder)
         {
-
             if (Items.Count == 0)
             {
                 CurrentFolder = anyFolder;
@@ -879,25 +894,25 @@ namespace FileEx
                 {
                     if (Data.IsOfType(StorageItemTypes.Folder))
                     {
-                        new FileModel("Folder", "f");
-                        IStorageFolder Folder;
-                        Folder = (IStorageFolder)Data;
+                        IStorageFolder Folder = Data as IStorageFolder;
                         headerText.Text = anyFolder.Name;
-                        if (GridType)
-                            SDGridView.ItemsPanel = (ItemsPanelTemplate)Resources["GridViewItemsPanel"];
-                        else SDGridView.ItemsPanel = (ItemsPanelTemplate)Resources["ListViewItemsPanel"];
-                        if (CurrentFolder.Path == @"D:\" || CurrentFolder.Path == @"C:\")
-                        {
-                            if (Folder.Name == "Videos") sd.Add(new FileModel(Folder.Name, "o", ""));
-                            else if (Folder.Name == "Pictures") sd.Add(new FileModel(Folder.Name, "f", ""));
-                            else if (Folder.Name == "Music") sd.Add(new FileModel(Folder.Name, "g", ""));
-                            else if (Folder.Name == "Downloads") sd.Add(new FileModel(Folder.Name, "e", ""));
-                            else if (Folder.Name == "Documents") sd.Add(new FileModel(Folder.Name, "n", ""));
-                            else sd.Add(new FileModel(Folder.Name, "h", ""));
-                        }
-                        else sd.Add(new FileModel(Folder.Name, "h", ""));
+                        //if (CurrentFolder.Path == @"D:\" || CurrentFolder.Path == @"C:\")
+                        //{
+                        //    if (Folder.Name == "Videos") sd.Add(new FileModel(Folder.Name, "o", ""));
+                        //    else if (Folder.Name == "Pictures") sd.Add(new FileModel(Folder.Name, "f", ""));
+                        //    else if (Folder.Name == "Music") sd.Add(new FileModel(Folder.Name, "g", ""));
+                        //    else if (Folder.Name == "Downloads") sd.Add(new FileModel(Folder.Name, "e", ""));
+                        //    else if (Folder.Name == "Documents") sd.Add(new FileModel(Folder.Name, "n", ""));
+                        //    else sd.Add(new FileModel(Folder.Name, "h", ""));
+                        //}
+                        //else 
+                        sd.Add(new FileModel(Folder.Name, "h", ""));
+                        //SDGridView.ItemsSource = sd;
+                        //if (GridType)
+                        //    SDGridView.ItemsPanel = (ItemsPanelTemplate)Resources["GridViewItemsPanel"];
+                        //else SDGridView.ItemsPanel = (ItemsPanelTemplate)Resources["ListViewItemsPanel"];
                     }
-                    if (Data.IsOfType(StorageItemTypes.File))
+                    else if (Data.IsOfType(StorageItemTypes.File))
                     {
                         IStorageFile File = (IStorageFile)Data;
                         string fn = File.Name;
@@ -1090,25 +1105,33 @@ namespace FileEx
                     }
                 }
             }
-            //else AI("This folder contains no items", 2);
         }
 
 
-        public void GetFilesAndFolder(IStorageFolder anyFolder)
+        public async void GetFilesAndFolder(IStorageFolder anyFolder)
         {
-            AI("", anyFolder.Path);
             if (anyFolder != null)
             {
                 sd.Clear();
-                CurrentFolder = anyFolder;
-                anyFolder.GetItemsAsync().Completed = (items, a) =>
+                IReadOnlyList<IStorageItem> items = await anyFolder.GetItemsAsync();
+                try
                 {
-                    Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                    {
-                        FileCategorize(items.GetResults(), anyFolder);
-                    });
+                    FileCategorize(items, anyFolder);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+                //.Completed = (items, a) =>
+                //{
 
-                };
+                //FileCategorize(items.GetResults(), anyFolder);
+
+                //Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                //{
+                //});
+
+                //};
             }
         }
 
@@ -1191,15 +1214,17 @@ namespace FileEx
         {
             using (ZipArchive archive = new ZipArchive(await compressedFile.OpenStreamForReadAsync()))
             {
+                sd.Clear();
+                this.Addresser.Address(compressedFile.Name, compressedFile.Path);
                 foreach (ZipArchiveEntry entry in archive.Entries)
                 {
                     //if (entry.FullName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
                     //{
                     //    entry.ExtractToFile(Path.Combine(extractPath, entry.FullName));
                     //}
-                    if (entry.Name.Contains('.'))
-                        sd.Add(new FileModel(entry.Name, "Q"));
-                    else sd.Add(new FileModel(entry.Name, "f"));
+                    if (entry.Name.Contains('/'))
+                        sd.Add(new FileModel(entry.Name, "f"));
+                    else sd.Add(new FileModel(entry.Name, "Q"));
                 }
             }
 
@@ -1299,23 +1324,24 @@ namespace FileEx
             if (SDGridView.SelectionMode == ListViewSelectionMode.Multiple)
             {
                 MultipleSelection(false);
-            } else if (SortMenu.Visibility == Visibility.Visible)
+            }
+            else if (SortMenu.Visibility == Visibility.Visible)
             {
                 SortMenu.Visibility = Visibility.Collapsed;
             }
         }
 
 
-        private void GridItemClick(object sender, ItemClickEventArgs e)
+        private async void GridItemClick(object sender, ItemClickEventArgs e)
         {
-            int index = SDGridView.Items.IndexOf((FileModel)e.ClickedItem);
-
-
+            var file = e.ClickedItem as FileModel;
+            int index = SDGridView.Items.IndexOf(file);
             AI("", index.ToString());
-            IStorageItem selectedItem = Items.ElementAt(index);
+            var selectedItem = await CurrentFolder.GetItemAsync(file.Name);
             if (selectedItem.IsOfType(StorageItemTypes.Folder))
             {
                 Addresser.Address(selectedItem.Name, selectedItem.Path);
+                CurrentFolder = selectedItem as IStorageFolder;
                 GetFilesAndFolder((IStorageFolder)selectedItem);
                 return;
             }

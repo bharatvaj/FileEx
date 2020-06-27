@@ -11,7 +11,7 @@
     BorderThickness="1" FontWeight="Thin"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <StackPanel MinWidth="35" Grid.Column="1">
-        <TextBlock x:Name="imageText" FontSize="20" Text="c" FontFamily="Assets/Font/iconFont.ttf#iconfont" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+        <TextBlock x:Name="imageText" FontSize="16" Text="c" FontFamily="Assets/Font/iconFont.ttf#iconfont" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
         <TextBlock x:Name="contentText" Text="copy" Grid.Row="1" FontFamily="Assets/Font/Custom/Raleway-Light.ttf#Raleway" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="12" FontWeight="Normal" />
     </StackPanel>
 </Button>
