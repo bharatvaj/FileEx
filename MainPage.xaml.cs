@@ -268,6 +268,7 @@ namespace FileEx
                         IStorageFolder folder = await picker.PickSingleFolderAsync();
                         if (folder != null)
                         {
+                            string faToken = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(folder);
                             ContentFrame.Navigate(typeof(FileListingPage), folder);
                         }
                         else

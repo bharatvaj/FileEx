@@ -731,8 +731,12 @@ namespace FileEx
                 {
                     int curFoldCharNm = CurrentFolder.Path.LastIndexOf(CurrentFolder.Name);
                     StorageFolder sf = await StorageFolder.GetFolderFromPathAsync(CurrentFolder.Path.Remove(curFoldCharNm));
-                    this.Addresser.RemoveLast();
-                    GetFilesAndFolder(sf);
+                    if (sf != null)
+                    {
+                        CurrentFolder = sf;
+                        this.Addresser.RemoveLast();
+                        GetFilesAndFolder(sf);
+                    }
                 }
                 catch { }
             }
